@@ -83,7 +83,7 @@ def getecrimage(reponame):
         
         
 def deployImage(servicename, clustername, image):
-        
+        print('Will Try Updating Service With Image' + image)
         try:
             response = ecsclient.describe_services(
                        cluster=clustername,
@@ -154,7 +154,7 @@ def deployImage(servicename, clustername, image):
                                                              placementConstraints=taskplacementConstraints)
             
             newTaskDefArn = defresponse['taskDefinition']['taskDefinitionArn']
-            print('Updating Service ....' + servicename  + 'for taskfamily :' + taskfamily)
+            print('Updating Service ....' + servicename  + ' for taskfamily :' + taskfamily)
             response = ecsclient.update_service(
                                                 cluster=clustername,
                                                 service=servicename,
