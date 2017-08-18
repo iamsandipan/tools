@@ -5,23 +5,85 @@ Created on Aug 11, 2017
 '''
 import boto3 
 import sys
+import datetime
+import time
+repo_service_map = {
+    'pss-vault-fileupdate':'pss-vault-fileupdate',
+    'pss-vault-imagedetection':'pss-vault-imagedetection',
+    'pss-vault-fileworker':'pss-vault-fileworker',
+    'pss-vault-atagservice':'pss-vault-atagservice',
+    'pss-vault-authenticationservice-int':'pss-vault-authenticationservice',
+    'pss-vault-identifyme':'pss-vault-identifyme',
+    'pss-vault-filedelete-wrk':'pss-vault-filedelete',
+    'pss-vault-configservice':'pss-vault-configservice',
+    'pss-vault-searchservice-ext':'pss-vault-searchservice',
+    'pss-vault-reportingservice-int':'pss-vault-reportingservice',
+    'pss-vault-filecleanupworker':'pss-vault-filecleanupworker',
+    'pss-vault-reportingservice-ext':'pss-vault-reportingservice',
+    'pss-vault-accountservice-ext':'pss-vault-accountservice',
+    'pss-vault-droppedenrollment':'pss-vault-droppedenrollment',
+    'pss-vault-bellprovisioning':'pss-vault-bellprovisioning',
+    'pss-vault-fileservice':'pss-vault-fileservice',
+    'pss-vault-authenticationservice-ext':'pss-vault-authenticationservice',
+    'pss-vault-dataapi':'pss-vault-dataapi',
+    'pss-vault-accountservice-int':'pss-vault-accountservice',
+    'pss-vault-searchservice-int':'pss-vault-searchservice',
+    'pss-vault-imagedetection-wrk':'pss-vault-imagedetection',
+    'pss-vault-imagedetectionbacklog-worker':'pss-vault-imagedetectionbacklog-worker',
+    'pss-vault-sprintprovisioning':'pss-vault-sprintprovisioning'
+}
+
 
 def getecrimage(reponame):
         try:
-            response = ecrclient.list_images(
+            images = []
+            response = ecrclient.describe_images(
                 registryId='091036132616',
                 repositoryName=reponame,
-                maxResults=1,
                 filter={
                     'tagStatus': 'TAGGED'
                 }
             )
-            return '091036132616.dkr.ecr.us-east-1.amazonaws.com/' + response['imageIds'][0]['imageTag']
+            images = response['imageDetails']
+            
+            nexttoken = None
+            if('NextToken' in response):
+                nexttoken = response['NextToken']
+
+            while(nexttoken != None):
+                response = ecrclient.describe_images(
+                    registryId='091036132616',
+                    repositoryName=reponame,
+                    filter={
+                        'tagStatus': 'TAGGED'
+                    },
+                    NextToken=nexttoken
+                )
+                if('NextToken' in response):
+                    nexttoken = response['NextToken']
+                else:
+                    nexttoken = None  
+                images.append(response['imageDetails'])
+            
+            
+                
+            latestpush= int(time.mktime((datetime.datetime.today() - datetime.timedelta(days=int(30))).timetuple()))
+
+            latestImage = ''
+            for img in images:
+                pushed_time = int(time.mktime( img["imagePushedAt"].timetuple()))
+                if pushed_time > latestpush:
+                    latestpush = pushed_time
+                    latestImage = img
+             
+            print(latestImage['imageTags'][0]) 
+            
         except Exception as ex:
+            print(ex)
             return ex
         
         
-def deployImage(servicename, clustername):
+def deployImage(servicename, clustername, image):
         
         try:
             response = ecsclient.describe_services(
@@ -46,7 +108,7 @@ def deployImage(servicename, clustername):
             taskfamily = existingtaskdef['family']
             tasknetworkmode = existingtaskdef['networkMode']
             containerDefinitions = existingtaskdef['containerDefinitions']
-            # containerDefinitions[0]['image'] = containerDefinitions[0]['image']
+            containerDefinitions[0]['image'] = image
             taskvolumes = existingtaskdef['volumes']
             taskplacementConstraints = existingtaskdef['placementConstraints']
             defresponse = ecsclient.register_task_definition(family=taskfamily,
@@ -75,7 +137,8 @@ if __name__ == "__main__":
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     ecsclient = session.client('ecs')
     ecrclient = session.client('ecr')
-    image = getecrimage(serviceid)
-    deployImage(serviceid, clusterid)
-    #getecrimage('pss-vault-imagedetection', 'PSS-VAULT-DEV-CLUSTER')
+
+    image = getecrimage(repo_service_map[serviceid])
+    deployImage(serviceid, clusterid, image)
+
  
