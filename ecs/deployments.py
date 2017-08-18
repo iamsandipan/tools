@@ -91,25 +91,62 @@ def deployImage(servicename, clustername, image):
                             servicename
                         ]
             )
-            service =  response['services'][0]
+            if 'services' in response:
+                service =  response['services'][0]
+            else:
+                raise Exception('Service Not Present')
             
-            taskDefStr = service['taskDefinition']
-            servicename= service['serviceName']
-            desiredCount = service['desiredCount']
-            deploymentConfig = service['deploymentConfiguration']
+            if 'taskDefinition' in service:    
+                taskDefStr = service['taskDefinition']
+            else:
+                raise Exception('TaskDefinition Not Present')
+
+            if 'serviceName' in service:
+                servicename= service['serviceName']
+            else:
+                raise Exception('Service Name Not Present')
+
+            if 'desiredCount' in service:
+                desiredCount = service['desiredCount']
+            else:
+                desiredCount = 1
             
+            if 'deploymentConfiguration' in service:    
+                deploymentConfig = service['deploymentConfiguration']
+            else:
+                raise Exception('DeploymentConfiguration Name Not Present')
+
             
             existingtaskdef = ecsclient.describe_task_definition(
                 taskDefinition=taskDefStr
             )['taskDefinition']
             
+            if 'family' in existingtaskdef:
+                taskfamily = existingtaskdef['family']
+            else:
+                raise Exception('TaskDefinition Family Name Not Present')
+  
             
-            taskfamily = existingtaskdef['family']
-            tasknetworkmode = existingtaskdef['networkMode']
-            containerDefinitions = existingtaskdef['containerDefinitions']
-            containerDefinitions[0]['image'] = image
-            taskvolumes = existingtaskdef['volumes']
-            taskplacementConstraints = existingtaskdef['placementConstraints']
+            if 'networkMode' in existingtaskdef:
+                tasknetworkmode = existingtaskdef['networkMode']
+                print(tasknetworkmode)
+            else:
+                tasknetworkmode = 'bridge'    
+            
+            if 'containerDefinitions' in existingtaskdef:
+                containerDefinitions = existingtaskdef['containerDefinitions']
+                containerDefinitions[0]['image'] = image
+            else:
+                raise Exception('containerDefinitions  Not Present in TaskDefinitions')
+
+            
+            if 'volumes' in existingtaskdef:
+                taskvolumes = existingtaskdef['volumes']
+
+            if 'placementConstraints' in existingtaskdef:
+                taskplacementConstraints = existingtaskdef['placementConstraints']
+            
+            print('Registering Task Definition')
             defresponse = ecsclient.register_task_definition(family=taskfamily,
                                                              networkMode=tasknetworkmode,
                                                              containerDefinitions=containerDefinitions,
@@ -117,7 +154,7 @@ def deployImage(servicename, clustername, image):
                                                              placementConstraints=taskplacementConstraints)
             
             newTaskDefArn = defresponse['taskDefinition']['taskDefinitionArn']
-            print(newTaskDefArn)
+            print('Updating Service ....' + servicename  + 'for taskfamily :' + taskfamily)
             response = ecsclient.update_service(
                                                 cluster=clustername,
                                                 service=servicename,
@@ -125,7 +162,7 @@ def deployImage(servicename, clustername, image):
                                                 taskDefinition=newTaskDefArn,
                                                 deploymentConfiguration=deploymentConfig
                                             )
-            print (response)
+            print (response['ResponseMetadata'])
         except Exception as ex:
             print(ex)
 
