@@ -67,9 +67,9 @@ def getecrimage(reponame):
             
             
                 
-            latestpush= int(time.mktime((datetime.datetime.today() - datetime.timedelta(days=int(30))).timetuple()))
+            latestpush= int(time.mktime( images[0]["imagePushedAt"].timetuple()))
 
-            latestImage = ''
+            latestImage = images[0]
             for img in images:
                 pushed_time = int(time.mktime( img["imagePushedAt"].timetuple()))
                 if pushed_time > latestpush:
