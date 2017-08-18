@@ -76,8 +76,7 @@ def getecrimage(reponame):
                     latestpush = pushed_time
                     latestImage = img
              
-            print(latestImage['imageTags'][0]) 
-            
+            return '091036132616.dkr.ecr.us-east-1.amazonaws.com/' + reponame +':'+ latestImage['imageTags'][0]
         except Exception as ex:
             print(ex)
             return ex
