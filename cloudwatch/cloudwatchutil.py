@@ -21,7 +21,6 @@ if __name__ == "__main__":
             'PSS-VAULT-PP-UPLOADED-FILES-S3EVENTS-QUEUE-DECREASE',
             'awsec2-ECS-PSS-VAULT-SQA-CLUSTER-High-CPU-Utilization-Down',
             'pss-vault-scaledown-alarm',
-            'pss-vault-sprint-enrollment-worker',
             'pss-vault-imagedetection-low-cpu-scaling-alarm',
             'pss-vault-authenticationservice-ext-low-cpu-scaling-alarm',
             'pss-vault-fileservice-low-cpu-scaling-alarm',

@@ -9,6 +9,7 @@ import datetime
 import time
 repo_service_map = {
     'pss-vault-fileupdate':'pss-vault-fileupdate',
+    'pss-vault-sprint-enrollment-worker' : 'pss-vault-sprint-enrollment-worker',
     'pss-vault-imagedetection':'pss-vault-imagedetection',
     'pss-vault-fileworker':'pss-vault-fileworker',
     'pss-vault-atagservice':'pss-vault-atagservice',
