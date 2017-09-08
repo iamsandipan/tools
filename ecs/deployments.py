@@ -24,7 +24,7 @@ repo_service_map = {
     'pss-vault-accountservice-ext':'pss-vault-accountservice',
     'pss-vault-droppedenrollment':'pss-vault-droppedenrollment',
     'pss-vault-bellprovisioning':'pss-vault-bellprovisioning',
-    'pss-vault-fileservice':'pss-vault-fileservice',
+    'pss-vault-fileservice-ext':'pss-vault-fileservice',
     'pss-vault-authenticationservice-ext':'pss-vault-authenticationservice',
     'pss-vault-dataapi':'pss-vault-dataapi',
     'pss-vault-accountservice-int':'pss-vault-accountservice',
