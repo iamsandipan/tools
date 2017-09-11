@@ -97,6 +97,13 @@ if __name__=="__main__":
     newUrl = sys.argv[5]
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     
+    print(hostedzoneName)
+    print(recordSetName)
+    print(recordSetType)
+    print(newUrl)
+    print(env)
+
+    
     '''
     hostedzoneName = 'asurionpa.com.'
     recordSetName = 'hello-svc-memories.asurionpa.com'
