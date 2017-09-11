@@ -4,6 +4,7 @@ Created on Sep 7, 2017
 @author: sandipan.chakrabarti
 '''
 import boto3
+import sys
 route53client = boto3.client('route53')
 def getHostedZones(dnsName, nextHostedZoneId):
     if nextHostedZoneId is None and dnsName is None:
@@ -89,13 +90,22 @@ def getHostedZoneId(hostedzonename):
 
         
 if __name__=="__main__":
+    env = sys.argv[1]
+    hostedzoneName = sys.argv[2]
+    recordSetName = sys.argv[3]
+    recordSetType = sys.argv[4]
+    newUrl = sys.argv[5]
+    session = boto3.session.Session(profile_name=env, region_name='us-east-1')
+    
+    '''
     hostedzoneName = 'asurionpa.com.'
-    recordSetId = 'hello-svc-memories.asurionpa.com'
+    recordSetName = 'hello-svc-memories.asurionpa.com'
     recordSetType = 'CNAME'
     newUrl = 'helloworld-3-alb-1052942687.us-east-1.elb.amazonaws.com'
+    '''
     
     hostedZoneId=getHostedZoneId(hostedzoneName)
-    recordset = findRecordSet(recordSetId, recordSetType)
+    recordset = findRecordSet(recordSetName, recordSetType)
     
     if recordset is None:
         raise Exception('RecordSet Not found')
