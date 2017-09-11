@@ -96,7 +96,8 @@ if __name__=="__main__":
     recordSetType = sys.argv[4]
     newUrl = sys.argv[5]
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
-    
+    route53client = session.client('route53')
+
     print(hostedzoneName)
     print(recordSetName)
     print(recordSetType)
