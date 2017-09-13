@@ -33,7 +33,8 @@ repo_service_map = {
     'pss-vault-searchservice-int':'pss-vault-searchservice',
     'pss-vault-imagedetection-wrk':'pss-vault-imagedetection',
     'pss-vault-imagedetectionbacklog-worker':'pss-vault-imagedetectionbacklog-worker',
-    'pss-vault-sprintprovisioning':'pss-vault-sprintprovisioning'
+    'pss-vault-sprintprovisioning':'pss-vault-sprintprovisioning',
+    'pss-vault-filecleanup-worker':'pss-vault-filecleanup-worker'
 }
 
 
