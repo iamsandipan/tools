@@ -1,0 +1,17 @@
+#!/bin/bash
+gitserver=http://nedappjira001.int.asurion.com:8990
+repositorypath=scm/stshgenesis
+java=src/main/java
+webapp=src/main/webapp
+
+mkdir -p src/main/java
+mkdir -p webapp
+
+for name in $*
+	do
+		git clone $gitserver/$repositorypath/$name.git
+		cp  -R  $name/$java/* $java/
+		if [ -d "$name/$webapp" ]; then
+			cp -R $name/$webapp/* webapp/
+		fi
+	done
