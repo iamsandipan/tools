@@ -18,8 +18,6 @@ def getHitCount(query):
     return response['hits']['found']
 
 if __name__ == "__main__":
-    
-
     env = 'SQA'
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     searchclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL)
