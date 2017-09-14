@@ -4,11 +4,10 @@ Created on Sep 12, 2017
 @author: sandipan.chakrabarti
 '''
 import mixpanel
-import pip
+import boto3
 
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
-import boto3
 
 DOMAIN_URL='http://search-pss-vault-qa-cgn-cs-dkvcsd52efuifgkagv4dg4ckiq.us-east-1.cloudsearch.amazonaws.com'
 def getHitCount(query):
@@ -19,9 +18,7 @@ def getHitCount(query):
     return response['hits']['found']
 
 if __name__ == "__main__":
-    installed_packages = pip.get_installed_distributions()
-    installed_packages_list = sorted(["%s==%s" % (i.key, i.version) for i in installed_packages])
-    print(installed_packages_list)
+    
 
     env = 'SQA'
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
