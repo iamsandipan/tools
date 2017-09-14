@@ -3,6 +3,9 @@ Created on Sep 12, 2017
 
 @author: sandipan.chakrabarti
 '''
+import mixpanel
+import pip
+
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 import boto3
@@ -16,6 +19,10 @@ def getHitCount(query):
     return response['hits']['found']
 
 if __name__ == "__main__":
+    installed_packages = pip.get_installed_distributions()
+    installed_packages_list = sorted(["%s==%s" % (i.key, i.version) for i in installed_packages])
+    print(installed_packages_list)
+
     env = 'SQA'
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     searchclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL)
