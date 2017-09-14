@@ -3,6 +3,7 @@ Created on Sep 12, 2017
 
 @author: sandipan.chakrabarti
 '''
+import mixpanel
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 import boto3
