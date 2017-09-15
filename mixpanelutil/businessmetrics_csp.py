@@ -99,7 +99,7 @@ if __name__ == "__main__":
     print('Video Uploaded GB' + str(totalVideoSize))
     
     resp = mp.track('OperationalMetrics_CSP', 'OperationalMetrics_CSP', {
-        'TotalPhotos' : totalFiles,
+        'TotalFiles' : totalFiles,
         'TotalPhotos': totalPhotos,
         'TotalVideos' : totalVideos,
         'TotalFilesSizeUploadedInGB':totalFileSizeUploaded,
