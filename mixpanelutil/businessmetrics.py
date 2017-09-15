@@ -5,38 +5,98 @@ Created on Sep 12, 2017
 '''
 import mixpanel
 import boto3
-
+import datetime
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 
-DOMAIN_URL='http://search-pss-vault-qa-cgn-cs-dkvcsd52efuifgkagv4dg4ckiq.us-east-1.cloudsearch.amazonaws.com'
-def getHitCount(query):
+DOMAIN_URL='http://search-pss-vault-prod-csp-cs-wikr7mxllygo2gpubeicxrruwq.us-east-1.cloudsearch.amazonaws.com'
+#'http://search-pss-vault-qa-cgn-cs-dkvcsd52efuifgkagv4dg4ckiq.us-east-1.cloudsearch.amazonaws.com'
+
+def fireStructuredQuerywithstatus(query):
+    response = searchclient.search(
+                        query = query,
+                        facet = '{"file_state":{"buckets":["PENDING"]}}',
+                        queryParser='structured',
+                )
+    print(response)
+    return response['stats']['file_size']
+
+
+def fireStructuredQuerywithstats(query):
+    response = searchclient.search(
+                        query = query,
+                        queryParser='structured',
+                        stats='{"file_size":{}}'
+                )
+    return response['stats']['file_size']
+
+def fireStructuredQuery(query):
     response = searchclient.search(
                         query = query,
                         queryParser='structured'
                 )
     return response['hits']['found']
 
+def getFileStatus(filetype):
+    now = (datetime.datetime.now())
+    starttime = datetime.datetime(now.year, now.month, now.day -1 , 0, 0, 0).strftime('%s000')
+    endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
+    query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
+    return fireStructuredQuerywithstatus(query) 
+
+def getFileStats(filetype):
+    now = (datetime.datetime.now())
+    starttime = datetime.datetime(now.year, now.month, now.day -1 , 0, 0, 0).strftime('%s000')
+    endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
+    query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
+    return fireStructuredQuerywithstats(query) 
+
+def getPreviousDayVideoCount():
+    now = (datetime.datetime.now())
+    starttime = datetime.datetime(now.year, now.month, now.day  - 1, 0, 0, 0).strftime('%s000')
+    endtime = datetime.datetime(now.year, now.month, now.day, 0, 0, 0).strftime('%s000')
+    query = '(and file_type:\'video\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
+    return fireStructuredQuery(query)  
+
+def getPreviousDayImageCount():
+    now = (datetime.datetime.now())
+    starttime = datetime.datetime(now.year, now.month, now.day - 1, 0, 0, 0).strftime('%s000')
+    endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
+    query = '(and file_type:\'image\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
+    return fireStructuredQuery(query)  
+
+    
+def fireSimpleQuery(query):
+    response = searchclient.search(
+                        query = query
+                )
+    return response['hits']['found']
+
 if __name__ == "__main__":
-    env = 'SQA'
+    env = 'asurion-prod.appadmins'
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     searchclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL)
     
-    videoquery = 'file_type: \'video\''
-    videos = getHitCount(videoquery)
-    
-    imagequery = 'file_type: \'image\''
-    images = getHitCount(imagequery)
-                
-    print (videos)
-    print (images)
+    print ('Previous Day Counts ')
+    videostats = getFileStats('video')
+    photostats = getFileStats('image')
     
     
+    totalVideos = videostats['count']
+    totalPhotos = photostats['count']
+    totalFiles = totalVideos + totalPhotos
     
+    totalFileSizeUploaded = int(((videostats['sum'] + photostats['sum']))/(1024*1024*1024))
+    totalPhotoSize = int(photostats['sum']/(1024*1024*1024))
+    totalVideoSize = int(videostats['sum']/(1024*1024*1024))
+ 
+    
+    '''
     resp = mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
         'TotalPhotos': images,
         'TotalVideos' : videos
     })
+    '''
     print ('Send to Mixpanel')
 
 # You can also include properties to describe
