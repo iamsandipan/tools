@@ -12,7 +12,6 @@ from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 
 DOMAIN_URL='http://search-pss-vault-prod-csp-cs-wikr7mxllygo2gpubeicxrruwq.us-east-1.cloudsearch.amazonaws.com'
-#'http://search-pss-vault-qa-cgn-cs-dkvcsd52efuifgkagv4dg4ckiq.us-east-1.cloudsearch.amazonaws.com'
 
 def fireStructuredQuerywithstatus(query):
     response = searchclient.search(
@@ -99,12 +98,14 @@ if __name__ == "__main__":
     totalVideoSize = int(videostats['sum']/(1024*1024*1024))
     print('Video Uploaded GB' + str(totalVideoSize))
     
-    '''
     resp = mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
-        'TotalPhotos': images,
-        'TotalVideos' : videos
+        'TotalPhotos' : totalFiles,
+        'TotalPhotos': totalPhotos,
+        'TotalVideos' : totalVideos,
+        'TotalFilesSizeUploadedInGB':totalFileSizeUploaded,
+        'TotalPhotoSizeUploadedInGB':totalPhotoSize,
+        'TotalVideoSizeUploadedInGB':totalVideoSize
     })
-    '''
     print ('Send to Mixpanel')
 
 # You can also include properties to describe
