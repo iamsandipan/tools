@@ -6,6 +6,8 @@ Created on Sep 12, 2017
 import mixpanel
 import boto3
 import datetime
+import sys
+
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 
@@ -73,7 +75,8 @@ def fireSimpleQuery(query):
     return response['hits']['found']
 
 if __name__ == "__main__":
-    env = 'asurion-prod.appadmins'
+    env = sys.argv[1]
+    print(env)
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     searchclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL)
     
@@ -81,15 +84,20 @@ if __name__ == "__main__":
     videostats = getFileStats('video')
     photostats = getFileStats('image')
     
-    
     totalVideos = videostats['count']
+    print('Total Videos' + str(totalVideos))
     totalPhotos = photostats['count']
+    print('Total Photos' + str(totalPhotos))
     totalFiles = totalVideos + totalPhotos
+    print('Total Files' + str(totalFiles))
+
     
     totalFileSizeUploaded = int(((videostats['sum'] + photostats['sum']))/(1024*1024*1024))
+    print('Total Uploaded GB' + str(totalFileSizeUploaded))
     totalPhotoSize = int(photostats['sum']/(1024*1024*1024))
+    print('Photo Uploaded GB' + str(totalPhotoSize))
     totalVideoSize = int(videostats['sum']/(1024*1024*1024))
- 
+    print('Video Uploaded GB' + str(totalVideoSize))
     
     '''
     resp = mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
