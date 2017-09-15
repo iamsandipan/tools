@@ -98,7 +98,7 @@ if __name__ == "__main__":
     totalVideoSize = int(videostats['sum']/(1024*1024*1024))
     print('Video Uploaded GB' + str(totalVideoSize))
     
-    resp = mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
+    resp = mp.track('OperationalMetrics_CSP', 'OperationalMetrics_CSP', {
         'TotalPhotos' : totalFiles,
         'TotalPhotos': totalPhotos,
         'TotalVideos' : totalVideos,
