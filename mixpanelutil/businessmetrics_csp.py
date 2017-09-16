@@ -98,7 +98,6 @@ if __name__ == "__main__":
     totalVideoSize = int(videostats['sum']/(1024*1024*1024))
     print('Video Uploaded GB' + str(totalVideoSize))
     
-    '''
     resp = mp.track('OperationalMetrics_CSP', 'OperationalMetrics_CSP', {
         'TotalFiles' : totalFiles,
         'TotalPhotos': totalPhotos,
@@ -107,7 +106,6 @@ if __name__ == "__main__":
         'TotalPhotoSizeUploadedInGB':totalPhotoSize,
         'TotalVideoSizeUploadedInGB':totalVideoSize
     })
-    '''
     print ('Send to Mixpanel')
 
 # You can also include properties to describe
