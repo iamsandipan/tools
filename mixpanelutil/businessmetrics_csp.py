@@ -10,7 +10,7 @@ import sys
 
 from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
-
+#file_state 
 DOMAIN_URL='http://search-pss-vault-prod-csp-cs-wikr7mxllygo2gpubeicxrruwq.us-east-1.cloudsearch.amazonaws.com'
 
 def fireStructuredQuerywithstatus(query):
@@ -98,6 +98,7 @@ if __name__ == "__main__":
     totalVideoSize = int(videostats['sum']/(1024*1024*1024))
     print('Video Uploaded GB' + str(totalVideoSize))
     
+    '''
     resp = mp.track('OperationalMetrics_CSP', 'OperationalMetrics_CSP', {
         'TotalFiles' : totalFiles,
         'TotalPhotos': totalPhotos,
@@ -106,6 +107,7 @@ if __name__ == "__main__":
         'TotalPhotoSizeUploadedInGB':totalPhotoSize,
         'TotalVideoSizeUploadedInGB':totalVideoSize
     })
+    '''
     print ('Send to Mixpanel')
 
 # You can also include properties to describe
