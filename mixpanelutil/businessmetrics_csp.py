@@ -1,7 +1,7 @@
 '''
 Created on Sep 12, 2017
 
-@author: sandipan.chakrabarti
+@author: sandipan.chakrabarti f1
 '''
 import mixpanel
 import boto3
