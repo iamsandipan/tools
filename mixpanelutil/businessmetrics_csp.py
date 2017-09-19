@@ -1,7 +1,7 @@
 '''
 Created on Sep 12, 2017
 
-@author: sandipan.chakrabarti f1
+@author: sandipan.chakrabarti f1 something gone to master
 '''
 import mixpanel
 import boto3
