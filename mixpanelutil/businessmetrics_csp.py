@@ -1,7 +1,10 @@
 '''
 Created on Sep 12, 2017
 
+<<<<<<< HEAD
 @author: sandipan.chakrabarti f1 adding something to f1
+resolve conflict
+>>>>>>> master
 '''
 import mixpanel
 import boto3
