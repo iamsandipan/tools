@@ -44,7 +44,6 @@ def collectStats(carrier, searchclient):
     videostats = getFileStats('video', searchclient)
     photostats = getFileStats('image', searchclient)
     
-    print(videostats)
     if 'count' in videostats:
         totalVideos = videostats['count']
         print('Total Videos : ' + str(totalVideos))
