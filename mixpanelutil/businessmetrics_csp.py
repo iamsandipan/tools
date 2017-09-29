@@ -44,15 +44,14 @@ def collectStats(carrier, searchclient):
     videostats = getFileStats('video', searchclient)
     photostats = getFileStats('image', searchclient)
     
-    if videostats != None:
-        print(videostats)
+    print(videostats)
+    if 'count' in videostats:
         totalVideos = videostats['count']
-        print('Total Videos' + str(totalVideos))
-    
-    if photostats != None:
-        print(photostats)
+        print('Total Videos : ' + str(totalVideos))
+
+    if 'count' in photostats:
         totalPhotos = photostats['count']
-        print('Total Photos' + str(totalPhotos))
+        print('Total Photos :' + str(totalPhotos))
         
     '''
     totalFiles = totalVideos + totalPhotos
