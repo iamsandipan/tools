@@ -24,7 +24,12 @@ def fireStructuredQuerywithstats(query, searchclient):
                         stats='{"file_size":{}}'
                 )
     print(response)
-    return response['stats']['file_size']
+    stats = response['stats']
+    if 'file_size' in stats:
+        return stats['file_size']
+    else:
+        print('Returning None')
+        return None
 
 
 def getFileStats(filetype, searchclient):
@@ -38,10 +43,16 @@ def collectStats(carrier, searchclient):
     print('Previous Day Counts ')
     videostats = getFileStats('video', searchclient)
     photostats = getFileStats('image', searchclient)
-    totalVideos = videostats['count']
-    print('Total Videos' + str(totalVideos))
-    totalPhotos = photostats['count']
-    print('Total Photos' + str(totalPhotos))
+    
+    if videostats != None:
+        totalVideos = videostats['count']
+        print('Total Videos' + str(totalVideos))
+    
+    if photostats != None:
+        totalPhotos = photostats['count']
+        print('Total Photos' + str(totalPhotos))
+        
+    '''
     totalFiles = totalVideos + totalPhotos
     print('Total Files' + str(totalFiles))
     totalFileSizeUploaded = int(((videostats['sum'] + photostats['sum'])) / (1024 * 1024 * 1024))
@@ -58,7 +69,7 @@ def collectStats(carrier, searchclient):
             'TotalFilesSizeUploadedInGB':totalFileSizeUploaded, 
             'TotalPhotoSizeUploadedInGB':totalPhotoSize, 
             'TotalVideoSizeUploadedInGB':totalVideoSize})
-
+    '''
 if __name__ == "__main__":
     env = sys.argv[1]
     print(env)
