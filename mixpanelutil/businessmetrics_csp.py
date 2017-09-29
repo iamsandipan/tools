@@ -65,10 +65,9 @@ def collectStats(carrier, searchclient):
         totalVideoSize = int(videostats['sum'] / (1024 * 1024 * 1024))
         print('Video Uploaded GB' + str(totalVideoSize))
         
-    totalFileSizeUploaded = int((totalVideoSize + totalPhotoSize) / (1024 * 1024 * 1024))
+    totalFileSizeUploaded = int(totalVideoSize + totalPhotoSize)
     print('Total Uploaded GB' + str(totalFileSizeUploaded))
     
-    '''
     mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
             'CarrierId': carrier, 
             'TotalFiles':totalFiles, 
@@ -77,7 +76,7 @@ def collectStats(carrier, searchclient):
             'TotalFilesSizeUploadedInGB':totalFileSizeUploaded, 
             'TotalPhotoSizeUploadedInGB':totalPhotoSize, 
             'TotalVideoSizeUploadedInGB':totalVideoSize})
-    '''
+
 if __name__ == "__main__":
     env = sys.argv[1]
     print(env)
