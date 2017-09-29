@@ -29,7 +29,7 @@ def getFileStats(filetype):
     now = (datetime.datetime.now())
     starttime = datetime.datetime(now.year, now.month, now.day -1 , 0, 0, 0).strftime('%s000')
     endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
-    query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])) (and carrierId)'
+    query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
     return fireStructuredQuerywithstats(query) 
 
     
