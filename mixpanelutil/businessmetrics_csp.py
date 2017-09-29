@@ -23,6 +23,7 @@ def fireStructuredQuerywithstats(query, searchclient):
                         queryParser='structured',
                         stats='{"file_size":{}}'
                 )
+    print(response)
     return response['stats']['file_size']
 
 
