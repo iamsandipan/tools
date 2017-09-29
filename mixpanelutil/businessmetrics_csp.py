@@ -44,23 +44,32 @@ def collectStats(carrier, searchclient):
     videostats = getFileStats('video', searchclient)
     photostats = getFileStats('image', searchclient)
     
+    totalVideos = 0
     if 'count' in videostats:
         totalVideos = videostats['count']
         print('Total Videos : ' + str(totalVideos))
-
+    totalPhotos = 0
     if 'count' in photostats:
         totalPhotos = photostats['count']
         print('Total Photos :' + str(totalPhotos))
-        
-    '''
+     
     totalFiles = totalVideos + totalPhotos
     print('Total Files' + str(totalFiles))
-    totalFileSizeUploaded = int(((videostats['sum'] + photostats['sum'])) / (1024 * 1024 * 1024))
+
+    totalPhotoSize = 0
+    if 'sum' in photostats:
+        totalPhotoSize = int(photostats['sum'] / (1024 * 1024 * 1024))
+        print('Photo Uploaded GB' + str(totalPhotoSize))
+        
+    totalVideoSize = 0
+    if 'sum' in videostats:
+        totalVideoSize = int(videostats['sum'] / (1024 * 1024 * 1024))
+        print('Video Uploaded GB' + str(totalVideoSize))
+        
+    totalFileSizeUploaded = int((totalVideoSize + totalPhotoSize) / (1024 * 1024 * 1024))
     print('Total Uploaded GB' + str(totalFileSizeUploaded))
-    totalPhotoSize = int(photostats['sum'] / (1024 * 1024 * 1024))
-    print('Photo Uploaded GB' + str(totalPhotoSize))
-    totalVideoSize = int(videostats['sum'] / (1024 * 1024 * 1024))
-    print('Video Uploaded GB' + str(totalVideoSize))
+    
+    '''
     mp.track('OperationalMetrics_Memories', 'OperationalMetrics_Memories', {
             'CarrierId': carrier, 
             'TotalFiles':totalFiles, 
