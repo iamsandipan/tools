@@ -14,9 +14,10 @@ from mixpanel import Mixpanel
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 #file_state 
 DOMAIN_URL_SPRINT='http://search-pss-vault-prod-csp-cs-wikr7mxllygo2gpubeicxrruwq.us-east-1.cloudsearch.amazonaws.com'
+DOMAIN_URL_AFF='http://search-pss-vault-prod-cs-ss-pat5th5dkjym5sexzo4yg2fkxy.us-east-1.cloudsearch.amazonaws.com'
 
 
-def fireStructuredQuerywithstats(query):
+def fireStructuredQuerywithstats(query, searchclient):
     response = searchclient.search(
                         query = query,
                         queryParser='structured',
@@ -25,24 +26,17 @@ def fireStructuredQuerywithstats(query):
     return response['stats']['file_size']
 
 
-def getFileStats(filetype):
+def getFileStats(filetype, searchclient):
     now = (datetime.datetime.now())
     starttime = datetime.datetime(now.year, now.month, now.day -1 , 0, 0, 0).strftime('%s000')
     endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
     query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
-    return fireStructuredQuerywithstats(query) 
+    return fireStructuredQuerywithstats(query, searchclient) 
 
-    
-def fireSimpleQuery(query):
-    response = searchclient.search(
-                        query = query
-                )
-    return response['hits']['found']
-
-def collectStats(carrier):
+def collectStats(carrier, searchclient):
     print('Previous Day Counts ')
-    videostats = getFileStats('video')
-    photostats = getFileStats('image')
+    videostats = getFileStats('video', searchclient)
+    photostats = getFileStats('image', searchclient)
     totalVideos = videostats['count']
     print('Total Videos' + str(totalVideos))
     totalPhotos = photostats['count']
@@ -68,9 +62,13 @@ if __name__ == "__main__":
     env = sys.argv[1]
     print(env)
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
-    searchclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL_SPRINT)
-    collectStats('SPRINT')
-    collectStats('AFF')
+    sprintclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL_SPRINT)
+    
+    session = boto3.session.Session(profile_name=env, region_name='us-east-1')
+    affclient = session.client('cloudsearchdomain', endpoint_url=DOMAIN_URL_AFF)
+    
+    collectStats('SPRINT', sprintclient)
+    collectStats('AFF', affclient)
     print ('Send to Mixpanel')
 
 # You can also include properties to describe
