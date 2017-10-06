@@ -11,6 +11,7 @@ import datetime
 import sys
 
 from mixpanel import Mixpanel
+from datetime import timedelta
 mp = Mixpanel('664ffe7a8bdf85207bda500ac4251485')
 #file_state 
 DOMAIN_URL_SPRINT='http://search-pss-vault-prod-csp-cs-wikr7mxllygo2gpubeicxrruwq.us-east-1.cloudsearch.amazonaws.com'
@@ -35,6 +36,10 @@ def getFileStats(filetype, searchclient):
     now = (datetime.datetime.now())
     starttime = datetime.datetime(now.year, now.month, now.day -1 , 0, 0, 0).strftime('%s000')
     endtime = datetime.datetime(now.year, now.month, now.day , 0, 0, 0).strftime('%s000')
+    print(starttime)
+    print(endtime)
+
+    
     query = '(and file_type:\''+ filetype + '\' (and (range field=file_creation_date ['+ starttime +','+ endtime +'])))'
     return fireStructuredQuerywithstats(query, searchclient) 
 
