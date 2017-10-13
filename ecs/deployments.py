@@ -35,7 +35,8 @@ repo_service_map = {
     'pss-vault-imagedetectionbacklog-worker':'pss-vault-imagedetectionbacklog-worker',
     'pss-vault-sprintprovisioning':'pss-vault-sprintprovisioning',
     'pss-vault-filecleanup-worker':'pss-vault-filecleanupworker',
-    'pss-vault-nukefiles':'pss-vault-nukefiles'
+    'pss-vault-nukefiles':'pss-vault-nukefiles',
+    'pss-vault-fileattributes':'pss-vault-fileattributes'
 }
 
 
