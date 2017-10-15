@@ -7,38 +7,6 @@ import boto3
 import sys
 import datetime
 import time
-repo_service_map = {
-    'pss-vault-fileupdate':'pss-vault-fileupdate',
-    'pss-vault-sprint-enrollment-worker' : 'pss-vault-sprint-enrollment-worker',
-    'pss-vault-imagedetection':'pss-vault-imagedetection',
-    'pss-vault-fileworker':'pss-vault-fileworker',
-    'pss-vault-atagservice':'pss-vault-atagservice',
-    'pss-vault-authenticationservice-int':'pss-vault-authenticationservice',
-    'pss-vault-identifyme':'pss-vault-identifyme',
-    'pss-vault-filedelete-wrk':'pss-vault-filedelete',
-    'pss-vault-configservice':'pss-vault-configservice',
-    'pss-vault-searchservice-ext':'pss-vault-searchservice',
-    'pss-vault-reportingservice-int':'pss-vault-reportingservice',
-    'pss-vault-filecleanupworker':'pss-vault-filecleanupworker',
-    'pss-vault-reportingservice-ext':'pss-vault-reportingservice',
-    'pss-vault-accountservice-ext':'pss-vault-accountservice',
-    'pss-vault-droppedenrollment':'pss-vault-droppedenrollment',
-    'pss-vault-bellprovisioning':'pss-vault-bellprovisioning',
-    'pss-vault-fileservice-ext':'pss-vault-fileservice',
-    'pss-vault-fileservice':'pss-vault-fileservice',
-    'pss-vault-fileservice-int':'pss-vault-fileservice',
-    'pss-vault-authenticationservice-ext':'pss-vault-authenticationservice',
-    'pss-vault-dataapi':'pss-vault-dataapi',
-    'pss-vault-accountservice-int':'pss-vault-accountservice',
-    'pss-vault-searchservice-int':'pss-vault-searchservice',
-    'pss-vault-imagedetection-wrk':'pss-vault-imagedetection-wrk',
-    'pss-vault-imagedetectionbacklog-worker':'pss-vault-imagedetectionbacklog-worker',
-    'pss-vault-sprintprovisioning':'pss-vault-sprintprovisioning',
-    'pss-vault-filecleanup-worker':'pss-vault-filecleanupworker',
-    'pss-vault-nukefiles':'pss-vault-nukefiles',
-    'pss-vault-fileattributes':'pss-vault-fileattributes'
-}
-
 
 def getecrimage(reponame):
         try:
@@ -176,11 +144,12 @@ if __name__ == "__main__":
     env = sys.argv[1]
     serviceid = sys.argv[2]
     clusterid = sys.argv[3]
+    repositoryname = sys.argv[4]
     session = boto3.session.Session(profile_name=env, region_name='us-east-1')
     ecsclient = session.client('ecs')
     ecrclient = session.client('ecr')
 
-    image = getecrimage(repo_service_map[serviceid])
+    image = getecrimage(repositoryname)
     deployImage(serviceid, clusterid, image)
 
  
