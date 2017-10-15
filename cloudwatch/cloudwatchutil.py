@@ -17,7 +17,7 @@ def getKeyOrNone(key, mapobj):
     
     
 if __name__ == "__main__":
-    alarmnames=[
+    qaalarmnames=[
             'PSS-VAULT-PP-UPLOADED-FILES-S3EVENTS-QUEUE-DECREASE',
             'awsec2-ECS-PSS-VAULT-SQA-CLUSTER-High-CPU-Utilization-Down',
             'pss-vault-scaledown-alarm',
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         ]
     
     
-    for alarm in alarmnames:
+    for alarm in qaalarmnames:
         
         response = client.describe_alarms(
             AlarmNames=[
